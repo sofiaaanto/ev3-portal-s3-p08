@@ -1,4 +1,5 @@
 import boto3
+from botocore.client import Config
 
 from app.config import (
     AWS_ACCESS_KEY_ID,
@@ -12,12 +13,14 @@ class S3Service:
 
     def __init__(self):
 
+
         self.s3 = boto3.client(
             "s3",
             aws_access_key_id=AWS_ACCESS_KEY_ID,
             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
             aws_session_token=AWS_SESSION_TOKEN,
-            region_name=AWS_REGION
+            region_name=AWS_REGION,
+            config=Config(signature_version="s3v4")
         )
 
     def generate_presigned_url(
