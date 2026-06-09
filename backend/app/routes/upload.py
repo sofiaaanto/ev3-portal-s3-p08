@@ -1,6 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from app.models.upload_request import UploadRequest
+from app.services.s3_service import S3Service
 
+s3_service = S3Service()
 router = APIRouter()
 
 @router.post("/api/upload/presigned-url")
@@ -25,6 +27,7 @@ def generate_presigned_url(data: UploadRequest):
             detail="Tipo MIME no permitido"
         )
 
-    return {
-        "message": "archivo válido"
-    }
+    return s3_service.generate_presigned_url(
+    data.fileName,
+    data.fileType
+)
