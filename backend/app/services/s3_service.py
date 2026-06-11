@@ -26,7 +26,8 @@ class S3Service:
     def generate_presigned_url(
         self,
         file_name: str,
-        file_type: str
+        file_type: str,
+        file_size: int
     ):
 
         key = f"uploads/{file_name}"

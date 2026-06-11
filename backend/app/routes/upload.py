@@ -26,8 +26,15 @@ def generate_presigned_url(data: UploadRequest):
             status_code=400,
             detail="Tipo MIME no permitido"
         )
+    if data.fileSize > 18 * 1024 * 1024:
+        raise HTTPException(
+            status_code=400,
+            detail="El tamaño del archivo no puede exceder los 18 MB"
+        )
 
     return s3_service.generate_presigned_url(
     data.fileName,
-    data.fileType
+    data.fileType,
+    data.fileSize
+    
 )

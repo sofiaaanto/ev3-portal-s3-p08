@@ -18,12 +18,18 @@ function App() {
           },
           body: JSON.stringify({
             fileName: file.name,
-            fileType: file.type
+            fileType: file.type,
+            fileSize: file.size
           })
         }
       );
 
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+
       const data = await response.json();
+      console.log(data);
 
       // Subir archivo a S3
       const uploadResponse = await fetch(
