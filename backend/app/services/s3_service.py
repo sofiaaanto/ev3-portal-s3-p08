@@ -1,5 +1,7 @@
 import boto3
 from botocore.client import Config
+from datetime import datetime
+from botocore.exceptions import ClientError
 
 from app.config import (
     AWS_ACCESS_KEY_ID,
@@ -52,3 +54,38 @@ class S3Service:
             "key": key,
             "publicUrl": public_url
         }
+
+    def list_files(self):
+
+        response = self.s3.list_objects_v2(
+            Bucket=AWS_BUCKET_NAME
+        )
+
+        archivos = []
+
+        for obj in response.get("Contents", []):
+
+            archivos.append({
+                "id": obj["Key"],
+                "nombre": obj["Key"].replace("uploads/", ""),
+                "tamano": obj["Size"],
+                "fecha": obj["LastModified"].isoformat()
+            })
+
+        return archivos
+
+    def delete_file(self, file_name):
+
+        self.s3.delete_object(
+            Bucket=AWS_BUCKET_NAME,
+            Key=file_name
+        )
+
+        return {"message": "Archivo eliminado"}
+
+    def test_connection(self):
+        try:
+            self.s3.head_bucket(Bucket=AWS_BUCKET_NAME)
+            return {"status": "ok"}
+        except Exception as e:
+            return {"error": str(e)}

@@ -5,6 +5,22 @@ from app.services.s3_service import S3Service
 s3_service = S3Service()
 router = APIRouter()
 
+@router.get("/api/test")
+def test():
+    return s3_service.test_connection()
+
+@router.get("/api/files")
+def get_files():
+
+    return s3_service.list_files()
+
+@router.delete("/api/files/{file_name:path}")
+def delete_file(file_name: str):
+
+    print(file_name)
+
+    return s3_service.delete_file(file_name)
+
 @router.post("/api/upload/presigned-url")
 def generate_presigned_url(data: UploadRequest):
 
