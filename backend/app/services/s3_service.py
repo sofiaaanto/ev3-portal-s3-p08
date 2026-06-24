@@ -1,7 +1,9 @@
+from http.client import HTTPException
 import boto3
 from botocore.client import Config
 from datetime import datetime
 from botocore.exceptions import ClientError
+import logging
 
 from app.config import (
     AWS_ACCESS_KEY_ID,
@@ -10,6 +12,8 @@ from app.config import (
     AWS_REGION,
     AWS_BUCKET_NAME
 )
+
+logger = logging.getLogger(__name__)
 
 class S3Service:
 
@@ -99,5 +103,10 @@ class S3Service:
         try:
             self.s3.head_bucket(Bucket=AWS_BUCKET_NAME)
             return {"status": "ok"}
-        except Exception as e:
-            return {"error": str(e)}
+        except Exception:
+            logger.exception("Error al verificar conexión con S3")
+
+            raise HTTPException(
+                status_code=500,
+                detail="Error interno del servidor"
+            )
