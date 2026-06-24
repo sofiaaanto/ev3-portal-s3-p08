@@ -1,9 +1,29 @@
 import { useState, useEffect } from "react";
-
+import "./global.css";
 function App() {
-
   const [mensaje, setMensaje] = useState("");
   const [archivos, setArchivos] = useState([]);
+
+  const [subiendo, setSubiendo] = useState(false);
+  const [progreso, setProgreso] = useState(0);
+  const [orden, setOrden] = useState({ campo: "fecha", direccion: "desc" });
+
+  const archivosOrdenados = [...archivos].sort((a, b) => {
+    if (orden.campo === "nombre") {
+      return orden.direccion === "asc"
+        ? a.nombre.localeCompare(b.nombre)
+        : b.nombre.localeCompare(a.nombre);
+    }
+    if (orden.campo === "tamano") {
+      return orden.direccion === "asc" ? a.tamano - b.tamano : b.tamano - a.tamano;
+    }
+    if (orden.campo === "fecha") {
+      return orden.direccion === "asc"
+        ? new Date(a.fecha) - new Date(b.fecha)
+        : new Date(b.fecha) - new Date(a.fecha);
+    }
+    return 0;
+  });
 
   const uploadFile = async (file) => {
 
@@ -33,20 +53,49 @@ function App() {
       console.log(data);
 
       // Subir archivo a S3
-      const uploadResponse = await fetch(
-        data.presignedUrl,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": file.type
-          },
-          body: file
-        }
-      );
+      setSubiendo(true);
+      setProgreso(0);
+
+      const uploadResponse = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.open("PUT", data.presignedUrl);
+
+        xhr.setRequestHeader(
+          "Content-Type",
+          file.type
+        );
+
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const porcentaje = Math.round(
+              (event.loaded * 100) / event.total
+            );
+
+            setProgreso(porcentaje);
+          }
+        };
+
+        xhr.onload = () => {
+          resolve({
+            ok: xhr.status >= 200 && xhr.status < 300
+          });
+        };
+
+        xhr.onerror = () => reject();
+
+        xhr.send(file);
+      });
 
       if (uploadResponse.ok) {
-        setMensaje("Archivo subido correctamente");
+        setProgreso(100);
+        setMensaje("");
         obtenerArchivos();
+
+        setTimeout(() => {
+          setSubiendo(false);
+          setProgreso(0);
+        }, 1000);
       } else {
         setMensaje("Error al subir archivo");
       }
@@ -54,9 +103,10 @@ function App() {
     } catch (error) {
       console.error(error);
       setMensaje("Error");
+      setSubiendo(false);
+      setProgreso(0);
     }
   };
-
   const handleFileChange = async (event) => {
 
     const file = event.target.files[0];
@@ -96,8 +146,8 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <h1>Subida de archivos</h1>
+    <div className="app-container">
+    <h1> Bucket para subir archivos 🍓</h1>
 
       <input
         type="file"
@@ -105,7 +155,31 @@ function App() {
         onChange={handleFileChange}
       />
 
-      <p>{mensaje}</p>
+      <div className="orden-botones" style={{ margin: "1rem 0" }}>
+        <button onClick={() => setOrden({ campo: "nombre", direccion: "asc" })}>
+          Nombre A-Z
+        </button>
+        <button onClick={() => setOrden({ campo: "tamano", direccion: "asc" })}>
+          Tamaño ↑
+        </button>
+        <button onClick={() => setOrden({ campo: "fecha", direccion: "desc" })}>
+          Más recientes
+        </button>
+      </div>
+
+      {subiendo && (
+        <div className="barra-container">
+          <div
+            className="barra-carga"
+            style={{ width: `${progreso}%` }}
+          ></div>
+        </div>
+      )}
+
+      {subiendo && (
+        <p>🍓 Subiendo archivo... {progreso}%</p>
+      )}
+      {mensaje && <p>{mensaje}</p>}
 
       <h2>Archivos en S3</h2>
       <table border="1">
@@ -119,7 +193,7 @@ function App() {
         </thead>
 
         <tbody>
-          {archivos.map((archivo) => (
+          {archivosOrdenados.map((archivo) => (
             <tr key={archivo.id}>
               <td>{archivo.nombre}</td>
 
