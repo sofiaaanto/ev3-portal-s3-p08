@@ -8,6 +8,16 @@ function App() {
   const [progreso, setProgreso] = useState(0);
   const [orden, setOrden] = useState({ campo: "fecha", direccion: "desc" });
 
+  const toggleOrden = (campo) => {
+    setOrden((prevOrden) => {
+      const direccion =
+        prevOrden.campo === campo && prevOrden.direccion === "asc"
+          ? "desc"
+          : "asc";
+      return { campo, direccion };
+    });
+  };
+
   const archivosOrdenados = [...archivos].sort((a, b) => {
     if (orden.campo === "nombre") {
       return orden.direccion === "asc"
@@ -156,14 +166,16 @@ function App() {
       />
 
       <div className="orden-botones" style={{ margin: "1rem 0" }}>
-        <button onClick={() => setOrden({ campo: "nombre", direccion: "asc" })}>
-          Nombre A-Z
+        <button onClick={() => toggleOrden("nombre")}> 
+          {orden.campo === "nombre" && orden.direccion === "asc" ? "Nombre Z-A" : "Nombre A-Z"}
         </button>
-        <button onClick={() => setOrden({ campo: "tamano", direccion: "asc" })}>
-          Tamaño ↑
+
+        <button onClick={() => toggleOrden("tamano")}> 
+          {orden.campo === "tamano" && orden.direccion === "asc" ? "Tamaño ↓" : "Tamaño ↑"}
         </button>
-        <button onClick={() => setOrden({ campo: "fecha", direccion: "desc" })}>
-          Más recientes
+
+        <button onClick={() => toggleOrden("fecha")}> 
+          {orden.campo === "fecha" && orden.direccion === "asc" ? "Más antiguos" : "Más recientes"}
         </button>
       </div>
 
