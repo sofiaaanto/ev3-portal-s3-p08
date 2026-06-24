@@ -121,6 +121,25 @@ button:hover {
   box-shadow: 0 6px 15px rgba(255, 77, 109, 0.3);
 }
 
+.download-button {
+  display: inline-block;
+  background: linear-gradient(135deg, #ff72e0, #ff83cd);
+  color: white;
+  text-decoration: none;
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-weight: 100;
+  font-size: 0.80rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+  margin-right: 0.5rem;
+}
+
+.download-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(58, 136, 255, 0.35);
+  opacity: 0.95;
+}
+
 /* Tarjeta de subida */
 .upload-card {
   background: #fff8fa;

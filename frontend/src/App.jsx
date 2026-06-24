@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import "./global.css";
+
+const API_BASE = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
 function App() {
   const [mensaje, setMensaje] = useState("");
   const [archivos, setArchivos] = useState([]);
@@ -41,7 +44,7 @@ function App() {
 
       // Solicitar URL firmada
       const response = await fetch(
-        "http://127.0.0.1:8000/api/upload/presigned-url",
+        `${API_BASE}/api/upload/presigned-url`,
         {
           method: "POST",
           headers: {
@@ -129,7 +132,7 @@ function App() {
   const obtenerArchivos = async () => {
 
     const response = await fetch(
-      "http://127.0.0.1:8000/api/files"
+      `${API_BASE}/api/files`
     );
 
     const data = await response.json();
@@ -140,7 +143,7 @@ function App() {
   const eliminarArchivo = async (id) => {
 
     const response = await fetch(
-      `http://127.0.0.1:8000/api/files/${id}`,
+      `${API_BASE}/api/files/${id}`,
       {
         method: "DELETE"
       }
@@ -221,10 +224,10 @@ function App() {
 
               <td>
                 <a
-                  href={`http://127.0.0.1:8000/api/files/${encodeURIComponent(archivo.id)}/download`}
+                  className="download-button"
+                  href={`${API_BASE}/api/files/${encodeURIComponent(archivo.id)}/download`}
                   target="_blank"
                   rel="noreferrer"
-                  style={{ marginRight: "0.5rem" }}
                 >
                   Descargar
                 </a>
