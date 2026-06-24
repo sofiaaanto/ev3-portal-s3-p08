@@ -74,6 +74,18 @@ class S3Service:
 
         return archivos
 
+    def generate_presigned_get_url(self, file_name: str):
+        presigned_url = self.s3.generate_presigned_url(
+            ClientMethod="get_object",
+            Params={
+                "Bucket": AWS_BUCKET_NAME,
+                "Key": file_name
+            },
+            ExpiresIn=300
+        )
+
+        return {"presignedUrl": presigned_url}
+
     def delete_file(self, file_name):
 
         self.s3.delete_object(

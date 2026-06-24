@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import RedirectResponse
 from app.models.upload_request import UploadRequest
 from app.services.s3_service import S3Service
 
@@ -20,6 +21,11 @@ def delete_file(file_name: str):
     print(file_name)
 
     return s3_service.delete_file(file_name)
+
+@router.get("/api/files/{file_name:path}/download")
+def download_file(file_name: str):
+    presigned = s3_service.generate_presigned_get_url(file_name)
+    return RedirectResponse(presigned["presignedUrl"])
 
 @router.post("/api/upload/presigned-url")
 def generate_presigned_url(data: UploadRequest):

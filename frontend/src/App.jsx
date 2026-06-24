@@ -220,6 +220,14 @@ function App() {
               </td>
 
               <td>
+                <a
+                  href={`http://127.0.0.1:8000/api/files/${encodeURIComponent(archivo.id)}/download`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ marginRight: "0.5rem" }}
+                >
+                  Descargar
+                </a>
                 <button
                   onClick={() =>
                     eliminarArchivo(archivo.id)
