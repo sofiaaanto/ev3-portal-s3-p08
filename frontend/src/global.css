@@ -1,7 +1,7 @@
 /* Reset básico */
 * {
   margin: 0;
-  padding: 0;
+  padding: 10px;
   box-sizing: border-box;
 }
 /* Fuente y fondo */
@@ -10,12 +10,12 @@ body {
   font-family: "Poppins", sans-serif;
   background: linear-gradient(
     135deg,
-    #fc94b6,
-    #ffa3bf,
-    #f898b8
-  );
+    #ff758e76, 
+    #fd97a9a8,
+    rgba(255, 173, 188, 0.54)
+    );
   min-height: 100vh;
-}
+}ss
 
 /* Contenedor principal */
 .app-container {
@@ -30,14 +30,17 @@ body {
 /* Títulos */
 h1 {
   text-align: center;
-  color: #ffffff;
+  color: #4a7928;
   font-size: 2.5rem;
   margin-bottom: 20px;
+  font-family: "Poppins", sans-serif;
 }
 
 h2 {
-  color: #fff9fc;
+  color: #f74e7b;
   margin-top: 30px;
+  font-family: "Poppins", sans-serif;
+  font-size: 1.8rem;
 }
 
 /* Input */
@@ -78,8 +81,8 @@ table {
 thead {
   background: linear-gradient(
     90deg,
-    #ff8fab,
-    #ffb3c6
+    #ff758f, 
+    #ff4d6d
   );
   color: white;
 }
@@ -100,43 +103,45 @@ tbody tr:hover {
   background: #fff5f8;
 }
 
-/* Botón eliminar */
-button {
-  background: linear-gradient(
-    135deg,
-    #ff758f,
-    #ff4d6d
-  );
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 50px;
+/* Estilos compartidos para botones: mismo tamaño y alineación */
+.btn, button, .download-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  min-width: 120px;
+  height: 40px;
+  border-radius: 20px;
   cursor: pointer;
   font-weight: 600;
-  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+  text-decoration: none;
+  font-family: "Poppins", sans-serif;
+}
+
+/* Botón eliminar (estilo específico) */
+button {
+  background: linear-gradient(135deg, #ff758f, #ff4d6d);
+  color: white;
+  border: none;
 }
 
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(255, 77, 109, 0.3);
+  box-shadow: 0 6px 15px rgba(253, 30, 223, 0.3);
 }
 
+/* Botón de descarga (estilo específico) */
 .download-button {
-  display: inline-block;
-  background: linear-gradient(135deg, #ff72e0, #ff83cd);
+  background: linear-gradient(135deg, #85de7f, #5dc25d);
   color: white;
-  text-decoration: none;
-  padding: 7px 14px;
-  border-radius: 20px;
-  font-weight: 100;
-  font-size: 0.80rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
   margin-right: 0.5rem;
 }
 
 .download-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(58, 136, 255, 0.35);
+  box-shadow: 0 6px 15px rgba(57, 185, 37, 0.35);
   opacity: 0.95;
 }
 

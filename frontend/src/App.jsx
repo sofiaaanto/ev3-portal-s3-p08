@@ -160,7 +160,7 @@ function App() {
 
   return (
     <div className="app-container">
-    <h1> Bucket para subir archivos 🍓</h1>
+    <h1> Bucket para subir archivos</h1>
 
       <input
         type="file"
