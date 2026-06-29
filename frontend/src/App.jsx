@@ -102,6 +102,22 @@ function App() {
 
       if (uploadResponse.ok) {
         setProgreso(100);
+
+        await fetch(`${API_BASE}/api/files/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            key: data.key,
+            publicUrl: data.publicUrl,
+            fileName: file.name,
+            fileSize: file.size
+          })
+        });
+
+        
+
         setMensaje("");
         obtenerArchivos();
 
@@ -141,17 +157,17 @@ function App() {
   };
 
   const eliminarArchivo = async (id) => {
-
     const response = await fetch(
-      `${API_BASE}/api/files/${id}`,
-      {
-        method: "DELETE"
-      }
+      `${API_BASE}/api/files/${encodeURIComponent(id)}`,
+      { method: "DELETE" }
     );
 
-    if (response.ok) {
-      obtenerArchivos();
-    }
+    const data = await response.text();
+
+    console.log("DELETE status:", response.status);
+    console.log("DELETE response:", data);
+
+    obtenerArchivos();
   };
 
   useEffect(() => {

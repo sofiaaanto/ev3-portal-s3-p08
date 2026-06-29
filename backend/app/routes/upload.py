@@ -2,8 +2,12 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import RedirectResponse
 from app.models.upload_request import UploadRequest
 from app.services.s3_service import S3Service
+from app.models.file_register import FileRegister
+from app.services.dynamodb_service import DynamoDBService
+
 
 s3_service = S3Service()
+dynamo = DynamoDBService()
 router = APIRouter()
 
 @router.get("/api/test")
@@ -15,12 +19,17 @@ def get_files():
 
     return s3_service.list_files()
 
+
 @router.delete("/api/files/{file_name:path}")
 def delete_file(file_name: str):
 
-    print(file_name)
+    # 1. borrar S3
+    s3_service.delete_file(file_name)
 
-    return s3_service.delete_file(file_name)
+    # 2. borrar DynamoDB
+    dynamo.eliminar_archivo(file_name)
+
+    return {"message": "Archivo eliminado"}
 
 @router.get("/api/files/{file_name:path}/download")
 def download_file(file_name: str):
@@ -60,3 +69,9 @@ def generate_presigned_url(data: UploadRequest):
     data.fileSize
     
 )
+
+
+@router.post("/api/files/register")
+def register_file(data: FileRegister):
+
+    return dynamo.guardar_archivo(data)

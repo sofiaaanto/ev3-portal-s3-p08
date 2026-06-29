@@ -97,8 +97,8 @@ class S3Service:
             Key=file_name
         )
 
-        return {"message": "Archivo eliminado"}
-
+        return {"message": "Archivo eliminado de S3"}
+    
     def test_connection(self):
         try:
             self.s3.head_bucket(Bucket=AWS_BUCKET_NAME)
