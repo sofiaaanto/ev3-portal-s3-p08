@@ -209,10 +209,8 @@ Agregar capturas de:
 
 # Mejoras Futuras
 
-- Eliminación de archivos.
 - Búsqueda de documentos.
 - Historial de operaciones.
-- Despliegue completo en AWS.
 
 
 # Licencia
