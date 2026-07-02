@@ -16,20 +16,20 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["http://localhost:5173"], # qué dominios pueden acceder
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"],  # qué métodos HTTP se permiten (GET, POST, etc.)
+    allow_headers=["*"],  #qué headers se permiten
 )
 
 app.include_router(upload_router)
 app.include_router(dynamodb_router)
 
-@app.get("/")
+@app.get("/")  #health check básico
 def home():
     return {"mensaje": "Backend funcionando"}
 
-@app.get("/healthz")
+@app.get("/healthz") #health check básico
 def health():
     return {"status": "ok"}
 

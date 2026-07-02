@@ -57,7 +57,6 @@ El sistema permite almacenar documentos utilizando **Amazon S3** y registrar sus
 
 - Amazon S3
 - Amazon DynamoDB
-- IAM
 - Presigned URLs
 
 ---
@@ -86,6 +85,7 @@ AWS_BUCKET_NAME=archivacloud-p08-useast-1
 Ejecutar:
 
 ```bash
+venv\Scripts\activate 
 uvicorn app.main:app --reload
 ```
 

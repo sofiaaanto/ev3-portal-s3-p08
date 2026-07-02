@@ -72,7 +72,9 @@ function App() {
       const uploadResponse = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
 
-        xhr.open("PUT", data.presignedUrl);
+        xhr.open("PUT", data.presignedUrl); //El backend genera una URL con boto3 (válida ~5 minutos).
+                            //El frontend hace un PUT directo a S3 con esa URL.
+
 
         xhr.setRequestHeader(
           "Content-Type",
