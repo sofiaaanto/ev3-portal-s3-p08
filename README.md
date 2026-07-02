@@ -203,7 +203,6 @@ Agregar capturas de:
 - Tabla DynamoDB.
 - Elementos DynamoDB.
 - Block Public Access.
-- IAM.
 - Cifrado S3.
 
 
